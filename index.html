@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Noir Audio Studio | Official Download</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ==========================================================================
+           Landing Page Specific Structural Styles (Compact Mobile / App Store Layout)
+           ========================================================================== */
+        body {
+            background-color: var(--noir-black, #0a0a0c);
+            color: var(--text-primary, #e8e6e3);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1rem 0 1rem;
+            gap: 2.5rem;
+        }
+
+        /* ---- App Store Header Layout ---- */
+        .app-header {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-areas: 
+                "icon title"
+                "icon meta"
+                "action action";
+            gap: 1rem 1.2rem;
+            align-items: center;
+            border-bottom: 1px solid var(--noir-border-subtle, #1c1c26);
+            padding-bottom: 2rem;
+        }
+
+        @media (min-width: 600px) {
+            .app-header {
+                grid-template-columns: auto 1fr auto;
+                grid-template-areas: 
+                    "icon title action"
+                    "icon meta action";
+                gap: 0.5rem 1.5rem;
+            }
+        }
+
+        .app-icon {
+            grid-area: icon;
+            width: 84px;
+            height: 84px;
+            border-radius: 20%;
+            background: var(--noir-surface, #16161c);
+            border: 1px solid var(--noir-border, #24242e);
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .app-title-container {
+            grid-area: title;
+            align-self: end;
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin: 0;
+            color: var(--text-primary, #e8e6e3);
+            line-height: 1.2;
+        }
+
+        .app-meta {
+            grid-area: meta;
+            align-self: start;
+            font-size: 0.75rem;
+            color: var(--text-secondary, #8a8897);
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        /* ---- Download Engine UI ---- */
+        .download-engine {
+            grid-area: action;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .btn-install {
+            background: var(--accent-dim, #4e4a62);
+            color: var(--text-primary, #e8e6e3);
+            border: 1px solid var(--accent-primary, #7a7590);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .btn-install:hover {
+            background: var(--accent-primary, #7a7590);
+            box-shadow: 0 0 15px var(--accent-glow, rgba(122, 117, 144, 0.2));
+        }
+
+        .btn-install:disabled {
+            background: var(--noir-surface, #16161c);
+            border-color: var(--noir-border, #24242e);
+            color: var(--text-tertiary, #5a586a);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Progress Bar Integration */
+        .progress-container {
+            display: none;
+            flex-direction: column;
+            gap: 0.4rem;
+            width: 100%;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-secondary, #8a8897);
+            font-weight: 500;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background: var(--noir-deep, #111116);
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid var(--noir-border-subtle, #1c1c26);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-bright, #9590a8);
+            transition: width 0.1s linear;
+        }
+
+        /* ---- Professional Description Section ---- */
+        .app-description {
+            padding: 0;
+            text-align: center;
+        }
+
+        .app-description h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .app-description p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* ---- Gallery Section (Horizontal Scroll App Store Style) ---- */
+        .gallery-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin: 0 -1rem; 
+            padding: 0 1rem;
+        }
+
+        .gallery-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary, #e8e6e3);
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+
+        .gallery-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+            padding-bottom: 1rem;
+        }
+
+        .gallery-scroll::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
+        /* Updated for Portrait Images */
+        .screenshot {
+            flex: 0 0 45%; /* Shows a portion of the screen, encouraging scrolling */
+            max-width: 260px; /* Cap width */
+            aspect-ratio: 9/16; /* Mobile Portrait Ratio */
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid var(--noir-border, #24242e);
+            background: var(--noir-void, #0e0e12);
+            scroll-snap-align: center;
+            opacity: 0.9;
+            cursor: pointer; /* Indicates it can be clicked */
+            transition: opacity 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @media (min-width: 600px) {
+            .screenshot {
+                flex: 0 0 30%; 
+            }
+        }
+
+        .screenshot:hover {
+            opacity: 1;
+            border-color: var(--accent-dim, #4e4a62);
+            transform: translateY(-2px);
+        }
+
+        /* ---- Footer ---- */
+        .site-footer {
+            margin-top: auto;
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--noir-border-subtle, #1c1c26);
+            color: var(--text-tertiary, #5a586a);
+            font-size: 0.8rem;
+        }
+
+        /* ---- Professional Image Lightbox/Modal ---- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 10, 12, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--noir-border, #24242e);
+            object-fit: contain;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* Utility classes */
+        .hidden { display: none !important; }
+        .active-block { display: flex !important; }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <header class="app-header">
+            <img src="icon.png" alt="Noir Audio Studio" class="app-icon" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxNjE2MWMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM1YTU4NmEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5OQVM8L3RleHQ+PC9zdmc+'">
+            
+            <div class="app-title-container">
+                <h1 class="app-title">Noir Audio Studio</h1>
+            </div>
+            
+            <div class="app-meta">Version 1.0.0 &bull; Beta Release</div>
+
+            <div class="download-engine">
+                <button id="installBtn" class="btn-install">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download
+                </button>
+
+                <div id="progressContainer" class="progress-container">
+                    <div class="progress-header">
+                        <span id="statusText">Preparing download...</span>
+                        <span id="percentageText">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="app-description">
+            <h1>Noir Audio Studio</h1>
+            <p>The ultimate dark-themed cinematic audio workspace. Engineered for precision editing, seamless transitions, and flawless multi-track composition.</p>
+        </section>
+
+        <section class="gallery-section">
+            <h2 class="gallery-header">Interface Overview</h2>
+            <div class="gallery-scroll" id="galleryGrid">
+                </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="container" style="padding:0;">
+                &copy; 2026 Noir Audio Studio. All rights reserved. Cinematic Chiaroscuro Design.
+            </div>
+        </footer>
+    </main>
+
+    <div id="imageModal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeModal" class="modal-close">&times;</button>
+            <img id="modalImage" class="modal-image" src="" alt="Enlarged Screenshot">
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           Noir Distribution Engine
+           Handles IndexedDB caching, stream reading, and blob generation seamlessly
+           ========================================================================== */
+        
+        const TARGET_URL = "https://dl.dropboxusercontent.com/scl/fi/talr5u066cy8ixwjuef4r/Noir-Audio-Studio_1.0.apk?rlkey=21xnnfnaaxthvzpi8yfmidskg&st=9jy7sp76&dl=1";
+        const FILENAME = "Noir_Audio_Studio_1.0.apk";
+        
+        // Database Config
+        const DB_NAME = "NoirDistributionEngine";
+        const STORE_NAME = "AssetCache";
+        const ASSET_KEY = "noir_apk_core";
+
+        // UI Elements
+        const installBtn = document.getElementById('installBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const percentageText = document.getElementById('percentageText');
+        const statusText = document.getElementById('statusText');
+
+        // Modal Elements
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        // 1. Initialize IndexedDB
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        db.createObjectStore(STORE_NAME);
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // 2. Database Operations
+        async function getCachedAsset(db) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(STORE_NAME, "readonly");
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.get(ASSET_KEY);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function cacheAsset(db, blob) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(STORE_NAME, "readwrite");
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.put(blob, ASSET_KEY);
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // 3. Trigger Local Download
+        function triggerLocalDownload(blob) {
+            statusText.innerText = "Download complete.";
+            installBtn.innerText = "Download APK";
+            installBtn.disabled = false;
+            progressContainer.classList.remove('active-block');
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = FILENAME;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            // Clean up memory after a short delay
+            setTimeout(() => URL.revokeObjectURL(url), 10000);
+        }
+
+        // 4. Core Fetch & Cache Engine (Smoothed out phrasing)
+        async function startInstallation() {
+            installBtn.disabled = true;
+            
+            try {
+                const db = await initDB();
+                
+                // Check Cache First
+                installBtn.innerText = "Checking...";
+                const cachedBlob = await getCachedAsset(db);
+                
+                if (cachedBlob) {
+                    statusText.innerText = "Loading file...";
+                    setTimeout(() => {
+                        triggerLocalDownload(cachedBlob);
+                    }, 300); // Shorter, snappier delay for the premium feel
+                    return;
+                }
+
+                // If not in DB, begin network stream
+                progressContainer.classList.add('active-block');
+                installBtn.innerText = "Downloading...";
+                statusText.innerText = "Starting download...";
+
+                const response = await fetch(TARGET_URL);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                const contentLength = response.headers.get('content-length');
+                const total = contentLength ? parseInt(contentLength, 10) : 0;
+                
+                let loaded = 0;
+                const chunks = [];
+                const reader = response.body.getReader();
+
+                statusText.innerText = "Downloading...";
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    chunks.push(value);
+                    loaded += value.length;
+
+                    if (total > 0) {
+                        const percent = Math.round((loaded / total) * 100);
+                        progressFill.style.width = `${percent}%`;
+                        percentageText.innerText = `${percent}%`;
+                    } else {
+                        // Fallback if Content-Length is missing
+                        percentageText.innerText = `${(loaded / (1024 * 1024)).toFixed(2)} MB`;
+                        progressFill.style.width = `100%`;
+                        progressFill.style.transition = "none";
+                    }
+                }
+
+                statusText.innerText = "Finalizing...";
+                const finalBlob = new Blob(chunks, { type: 'application/vnd.android.package-archive' });
+                
+                await cacheAsset(db, finalBlob);
+                triggerLocalDownload(finalBlob);
+
+            } catch (error) {
+                console.error("Installation failed:", error);
+                statusText.innerText = "Download failed.";
+                statusText.style.color = "var(--error-red, #ff453a)";
+                installBtn.innerText = "Retry Download";
+                installBtn.disabled = false;
+            }
+        }
+
+        installBtn.addEventListener('click', startInstallation);
+
+        // 5. Gallery Initializer & Modal Handling
+        function initGallery() {
+            const grid = document.getElementById('galleryGrid');
+            const exts = ['jpg', 'png', 'jpeg'];
+            const MAX_SCREENSHOTS = 10;
+            
+            for (let i = 1; i <= MAX_SCREENSHOTS; i++) {
+                const img = document.createElement('img');
+                img.className = 'screenshot';
+                img.alt = `Noir Studio Interface ${i}`;
+                
+                let extIndex = 0;
+                img.src = `screenshot_${i}.${exts[extIndex]}`;
+                
+                img.onerror = function() {
+                    extIndex++;
+                    if (extIndex < exts.length) {
+                        this.src = `screenshot_${i}.${exts[extIndex]}`;
+                    } else {
+                        this.style.display = 'none'; // Silently hide if missing
+                    }
+                };
+
+                // Add Lightbox Modal Triggers
+                img.addEventListener('click', function() {
+                    modalImg.src = this.src;
+                    modal.classList.add('active');
+                });
+                
+                grid.appendChild(img);
+            }
+        }
+
+        // Modal Close Handlers
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            // Close if clicking outside the image
+            if (e.target === modal || e.target === modal.querySelector('.modal-content')) {
+                modal.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', initGallery);
+    </script>
+</body>
+</html>
