@@ -7,17 +7,41 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="styles.css">
-
     <style>
         /* ==========================================================================
-           Landing Page Specific Structural Styles (Compact Mobile / App Store Layout)
+           Landing Page Specific Structural Styles (Premium Centered Layout)
            ========================================================================== */
+        :root {
+            --noir-black: #0a0a0c;
+            --noir-surface: #16161c;
+            --noir-border: #24242e;
+            --noir-border-subtle: #1c1c26;
+            --noir-deep: #111116;
+            --noir-void: #0e0e12;
+            
+            --text-primary: #e8e6e3;
+            --text-secondary: #8a8897;
+            --text-tertiary: #5a586a;
+            
+            --accent-primary: #7a7590;
+            --accent-dim: #4e4a62;
+            --accent-bright: #9590a8;
+            --accent-glow: rgba(122, 117, 144, 0.25);
+            
+            --error-red: #ff453a;
+        }
+
+        /* Cinematic Entrance Animation */
+        @keyframes cinematicFadeIn {
+            0% { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
         body {
-            background-color: var(--noir-black, #0a0a0c);
-            color: var(--text-primary, #e8e6e3);
+            background-color: var(--noir-black);
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
@@ -33,162 +57,161 @@
             max-width: 800px;
             display: flex;
             flex-direction: column;
-            padding: 2rem 1rem 0 1rem;
-            gap: 2.5rem;
+            padding: 3rem 1.5rem 0 1.5rem;
+            gap: 3rem;
+            animation: cinematicFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* ---- App Store Header Layout ---- */
-        .app-header {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            grid-template-areas: 
-                "icon title"
-                "icon meta"
-                "action action";
-            gap: 1rem 1.2rem;
+        /* ---- Premium Merged Hero Section ---- */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            border-bottom: 1px solid var(--noir-border-subtle, #1c1c26);
-            padding-bottom: 2rem;
-        }
-
-        @media (min-width: 600px) {
-            .app-header {
-                grid-template-columns: auto 1fr auto;
-                grid-template-areas: 
-                    "icon title action"
-                    "icon meta action";
-                gap: 0.5rem 1.5rem;
-            }
+            text-align: center;
+            border-bottom: 1px solid var(--noir-border-subtle);
+            padding-bottom: 3rem;
+            position: relative;
         }
 
         .app-icon {
-            grid-area: icon;
-            width: 84px;
-            height: 84px;
-            border-radius: 20%;
-            background: var(--noir-surface, #16161c);
-            border: 1px solid var(--noir-border, #24242e);
+            width: 110px;
+            height: 110px;
+            border-radius: 24%;
+            background: var(--noir-surface);
+            border: 1px solid var(--noir-border);
             object-fit: cover;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255,255,255,0.08);
+            margin-bottom: 1.5rem;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
         }
 
-        .app-title-container {
-            grid-area: title;
-            align-self: end;
+        .app-icon:hover {
+            transform: scale(1.03) translateY(-2px);
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.9), 0 0 30px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.1);
         }
 
         .app-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin: 0;
-            color: var(--text-primary, #e8e6e3);
-            line-height: 1.2;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(180deg, #ffffff 0%, var(--accent-bright) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
         }
 
         .app-meta {
-            grid-area: meta;
-            align-self: start;
-            font-size: 0.75rem;
-            color: var(--text-secondary, #8a8897);
-            font-weight: 500;
-            margin-top: 0.25rem;
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
         }
 
-        /* ---- Download Engine UI ---- */
+        .app-description-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 580px;
+            margin: 0 0 2.5rem 0;
+            font-weight: 400;
+        }
+
+        /* ---- Download & Action Engine UI ---- */
         .download-engine {
-            grid-area: action;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 1rem;
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .btn-install {
-            background: var(--accent-dim, #4e4a62);
-            color: var(--text-primary, #e8e6e3);
-            border: 1px solid var(--accent-primary, #7a7590);
-            padding: 0.75rem 1.5rem;
-            font-size: 0.85rem;
+            background: linear-gradient(180deg, var(--accent-dim) 0%, #3e3a52 100%);
+            color: var(--text-primary);
+            border: 1px solid var(--accent-primary);
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            border-radius: 6px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-transform: uppercase;
             letter-spacing: 0.05em;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
             width: 100%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
         }
 
         .btn-install:hover {
-            background: var(--accent-primary, #7a7590);
-            box-shadow: 0 0 15px var(--accent-glow, rgba(122, 117, 144, 0.2));
+            background: linear-gradient(180deg, var(--accent-primary) 0%, var(--accent-dim) 100%);
+            box-shadow: 0 0 24px var(--accent-glow), 0 8px 24px rgba(0,0,0,0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-install:active {
+            transform: translateY(1px);
         }
 
         .btn-install:disabled {
-            background: var(--noir-surface, #16161c);
-            border-color: var(--noir-border, #24242e);
-            color: var(--text-tertiary, #5a586a);
+            background: var(--noir-surface);
+            border-color: var(--noir-border);
+            color: var(--text-tertiary);
             cursor: not-allowed;
             box-shadow: none;
+            transform: none;
         }
 
         /* Progress Bar Integration */
         .progress-container {
             display: none;
             flex-direction: column;
-            gap: 0.4rem;
+            gap: 0.6rem;
             width: 100%;
+            background: rgba(22, 22, 28, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--noir-border-subtle);
         }
 
         .progress-header {
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
-            color: var(--text-secondary, #8a8897);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
             font-weight: 500;
+            letter-spacing: 0.02em;
         }
 
         .progress-track {
             width: 100%;
-            height: 4px;
-            background: var(--noir-deep, #111116);
-            border-radius: 2px;
+            height: 6px;
+            background: var(--noir-deep);
+            border-radius: 6px;
             overflow: hidden;
-            border: 1px solid var(--noir-border-subtle, #1c1c26);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
         }
 
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: var(--accent-bright, #9590a8);
-            transition: width 0.1s linear;
-        }
-
-        /* ---- Professional Description Section ---- */
-        .app-description {
-            padding: 0;
-            text-align: center;
-        }
-
-        .app-description h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-
-        .app-description p {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            max-width: 650px;
-            margin: 0 auto;
+            background: linear-gradient(90deg, var(--accent-dim), var(--accent-bright));
+            transition: width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 12px var(--accent-glow);
+            border-radius: 6px;
         }
 
         /* ---- Gallery Section (Horizontal Scroll App Store Style) ---- */
@@ -196,68 +219,73 @@
             display: flex;
             flex-direction: column;
             gap: 1.25rem;
-            margin: 0 -1rem; 
-            padding: 0 1rem;
+            margin: 0 -1.5rem; 
+            padding: 0 1.5rem;
         }
 
         .gallery-header {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-primary, #e8e6e3);
+            color: var(--text-primary);
             margin: 0;
             letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
 
         .gallery-scroll {
             display: flex;
-            gap: 1rem;
+            gap: 1.2rem;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none;  /* IE and Edge */
-            padding-bottom: 1rem;
+            padding-bottom: 1.5rem;
+            padding-top: 0.5rem;
         }
 
         .gallery-scroll::-webkit-scrollbar {
             display: none; /* Chrome, Safari and Opera */
         }
 
-        /* Updated for Portrait Images */
         .screenshot {
-            flex: 0 0 45%; /* Shows a portion of the screen, encouraging scrolling */
-            max-width: 260px; /* Cap width */
-            aspect-ratio: 9/16; /* Mobile Portrait Ratio */
+            flex: 0 0 50%; 
+            max-width: 280px; 
+            aspect-ratio: 9/16; 
             object-fit: cover;
-            border-radius: 12px;
-            border: 1px solid var(--noir-border, #24242e);
-            background: var(--noir-void, #0e0e12);
+            border-radius: 16px;
+            border: 1px solid var(--noir-border);
+            background: var(--noir-void);
             scroll-snap-align: center;
-            opacity: 0.9;
-            cursor: pointer; /* Indicates it can be clicked */
-            transition: opacity 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0.85;
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
 
         @media (min-width: 600px) {
             .screenshot {
-                flex: 0 0 30%; 
+                flex: 0 0 35%; 
             }
         }
 
         .screenshot:hover {
             opacity: 1;
-            border-color: var(--accent-dim, #4e4a62);
-            transform: translateY(-2px);
+            border-color: var(--accent-primary);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.7), 0 0 24px var(--accent-glow);
         }
 
         /* ---- Footer ---- */
         .site-footer {
             margin-top: auto;
-            padding: 2rem 0;
+            padding: 2.5rem 0;
             text-align: center;
-            border-top: 1px solid var(--noir-border-subtle, #1c1c26);
-            color: var(--text-tertiary, #5a586a);
-            font-size: 0.8rem;
+            border-top: 1px solid var(--noir-border-subtle);
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
         }
 
         /* ---- Professional Image Lightbox/Modal ---- */
@@ -268,14 +296,14 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(10, 10, 12, 0.95);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(10, 10, 12, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .modal-overlay.active {
@@ -290,33 +318,46 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transform: scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
         }
 
         .modal-image {
             max-width: 100%;
             max-height: 90vh;
-            border-radius: 12px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--noir-border, #24242e);
+            border-radius: 16px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.9), 0 0 0 1px var(--noir-border);
             object-fit: contain;
         }
 
         .modal-close {
             position: absolute;
-            top: -40px;
+            top: -60px;
             right: 0;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 2rem;
+            background: var(--noir-surface);
+            border: 1px solid var(--noir-border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            color: var(--text-primary);
+            font-size: 1.5rem;
             line-height: 1;
             cursor: pointer;
             padding: 0;
-            transition: color 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
         }
 
         .modal-close:hover {
-            color: var(--text-primary);
+            background: var(--accent-dim);
+            transform: scale(1.1);
         }
 
         /* Utility classes */
@@ -327,20 +368,21 @@
 <body>
 
     <main class="container">
-        <header class="app-header">
+        <header class="hero-section">
             <img src="icon.png" alt="Noir Audio Studio" class="app-icon" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxNjE2MWMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM1YTU4NmEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5OQVM8L3RleHQ+PC9zdmc+'">
             
-            <div class="app-title-container">
-                <h1 class="app-title">Noir Audio Studio</h1>
-            </div>
-            
+            <h1 class="app-title">Noir Audio Studio</h1>
             <div class="app-meta">Version 1.0.0 &bull; Beta Release</div>
+            
+            <p class="app-description-text">The ultimate dark-themed cinematic audio workspace. Engineered for precision editing, seamless transitions, and flawless multi-track composition.</p>
 
             <div class="download-engine">
-                <button id="installBtn" class="btn-install">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Download
-                </button>
+                <div class="action-group">
+                    <button id="installBtn" class="btn-install">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Download App
+                    </button>
+                </div>
 
                 <div id="progressContainer" class="progress-container">
                     <div class="progress-header">
@@ -354,27 +396,25 @@
             </div>
         </header>
 
-        <section class="app-description">
-            <h1>Noir Audio Studio</h1>
-            <p>The ultimate dark-themed cinematic audio workspace. Engineered for precision editing, seamless transitions, and flawless multi-track composition.</p>
-        </section>
-
         <section class="gallery-section">
-            <h2 class="gallery-header">Interface Overview</h2>
+            <h2 class="gallery-header">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                Interface Overview
+            </h2>
             <div class="gallery-scroll" id="galleryGrid">
-                </div>
+            </div>
         </section>
 
         <footer class="site-footer">
             <div class="container" style="padding:0;">
-                &copy; 2026 Noir Audio Studio. All rights reserved. Cinematic Chiaroscuro Design.
+                &copy; 2026 Noir Audio Studio. All rights reserved.<br>Cinematic Chiaroscuro Design.
             </div>
         </footer>
     </main>
 
     <div id="imageModal" class="modal-overlay">
         <div class="modal-content">
-            <button id="closeModal" class="modal-close">&times;</button>
+            <button id="closeModal" class="modal-close" aria-label="Close modal">&times;</button>
             <img id="modalImage" class="modal-image" src="" alt="Enlarged Screenshot">
         </div>
     </div>
@@ -460,7 +500,7 @@
             setTimeout(() => URL.revokeObjectURL(url), 10000);
         }
 
-        // 4. Core Fetch & Cache Engine (Smoothed out phrasing)
+        // 4. Core Fetch & Cache Engine
         async function startInstallation() {
             installBtn.disabled = true;
             
@@ -524,7 +564,7 @@
             } catch (error) {
                 console.error("Installation failed:", error);
                 statusText.innerText = "Download failed.";
-                statusText.style.color = "var(--error-red, #ff453a)";
+                statusText.style.color = "var(--error-red)";
                 installBtn.innerText = "Retry Download";
                 installBtn.disabled = false;
             }
@@ -544,12 +584,12 @@
                 img.alt = `Noir Studio Interface ${i}`;
                 
                 let extIndex = 0;
-                img.src = `screenshot_${i}.${exts[extIndex]}`;
+                img.src = `Screenshot_${i}.${exts[extIndex]}`;
                 
                 img.onerror = function() {
                     extIndex++;
                     if (extIndex < exts.length) {
-                        this.src = `screenshot_${i}.${exts[extIndex]}`;
+                        this.src = `Screenshot_${i}.${exts[extIndex]}`;
                     } else {
                         this.style.display = 'none'; // Silently hide if missing
                     }
@@ -573,6 +613,13 @@
         modal.addEventListener('click', (e) => {
             // Close if clicking outside the image
             if (e.target === modal || e.target === modal.querySelector('.modal-content')) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Add ESC key binding for modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
                 modal.classList.remove('active');
             }
         });
